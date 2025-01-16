@@ -1,15 +1,15 @@
 package care.resilience.core.domain.port.persistence
 
-import care.resilience.core.domain.model.UserMedicalStudy
+import care.resilience.adapter.persistence.entity.UserMedicalStudyEntity
 import java.util.*
 
 interface UserMedicalStudyRepositoryPort {
-    fun createUserMedicalStudy(userMedicalStudy: UserMedicalStudy): UserMedicalStudy
+    fun createUserMedicalStudy(userMedicalStudy: UserMedicalStudyEntity): UserMedicalStudyEntity
 
-    fun updateUserMedicalStudy(userMedicalStudy: UserMedicalStudy): UserMedicalStudy
+    fun updateUserMedicalStudy(userMedicalStudy: UserMedicalStudyEntity): UserMedicalStudyEntity
 
     fun findExistingUserMedicalStudy(
         patientRpmId: String,
         questionnaireTriggerId: UUID,
-    ): UserMedicalStudy?
+    ): UserMedicalStudyEntity?
 }

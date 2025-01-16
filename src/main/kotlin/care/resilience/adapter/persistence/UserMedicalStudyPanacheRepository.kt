@@ -1,9 +1,6 @@
 package care.resilience.adapter.persistence
 
 import care.resilience.adapter.persistence.entity.UserMedicalStudyEntity
-import care.resilience.adapter.persistence.mapper.UserMedicalStudyEntityMapper.toEntity
-import care.resilience.adapter.persistence.mapper.UserMedicalStudyEntityMapper.toModel
-import care.resilience.core.domain.model.UserMedicalStudy
 import care.resilience.core.domain.port.persistence.UserMedicalStudyRepositoryPort
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoRepository
 import jakarta.enterprise.context.ApplicationScoped
@@ -15,24 +12,21 @@ class UserMedicalStudyPanacheRepository :
     PanacheMongoRepository<UserMedicalStudyEntity>,
     UserMedicalStudyRepositoryPort {
     @Transactional
-    override fun createUserMedicalStudy(userMedicalStudy: UserMedicalStudy): UserMedicalStudy {
-        val entity = userMedicalStudy.toEntity()
-        persist(entity)
-        return entity.toModel()
+    override fun createUserMedicalStudy(userMedicalStudy: UserMedicalStudyEntity): UserMedicalStudyEntity {
+        persist(userMedicalStudy)
+        return userMedicalStudy
     }
 
     @Transactional
-    override fun updateUserMedicalStudy(userMedicalStudy: UserMedicalStudy): UserMedicalStudy {
-        val updatedEntity = userMedicalStudy.toEntity()
-        update(updatedEntity)
-        return updatedEntity.toModel()
+    override fun updateUserMedicalStudy(userMedicalStudy: UserMedicalStudyEntity): UserMedicalStudyEntity {
+        update(userMedicalStudy)
+        return userMedicalStudy
     }
 
     override fun findExistingUserMedicalStudy(
         patientRpmId: String,
         questionnaireTriggerId: UUID,
-    ): UserMedicalStudy? =
+    ): UserMedicalStudyEntity? =
         find("patientMongoId", patientRpmId, "questionnaireTriggerId", questionnaireTriggerId)
             .firstResult()
-            ?.toModel()
 }

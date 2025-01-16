@@ -6,8 +6,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import care.resilience.DatabaseResource
 import care.resilience.IntegrationTestProfile
-import care.resilience.adapter.persistence.mapper.UserMedicalStudyEntityMapper.toModel
-import care.resilience.core.domain.model.UserMedicalStudy
+import care.resilience.adapter.persistence.entity.UserMedicalStudyEntity
 import io.quarkus.test.common.QuarkusTestResource
 import io.quarkus.test.junit.QuarkusTest
 import io.quarkus.test.junit.TestProfile
@@ -33,12 +32,12 @@ class UserMedicalStudyPanacheRepositoryTest {
     @Test
     fun testCreate() {
         val userMedicalStudy =
-            UserMedicalStudy(
+            UserMedicalStudyEntity(
                 patientMongoId = "patientRpmId",
                 patientFirstName = "patientFirstName",
                 patientLastName = "patientLastName",
                 questionnaireName = "questionnaireName",
-                questionnaireTriggerId = UUID.randomUUID(),
+                questionnaireTriggerId = UUID.randomUUID().toString(),
             )
         val res = repository.createUserMedicalStudy(userMedicalStudy)
 
@@ -46,7 +45,7 @@ class UserMedicalStudyPanacheRepositoryTest {
         assertThat(res.id).isNotNull()
         assertThat(repository.count()).isEqualTo(1)
 
-        val entities = repository.listAll().map { it.toModel() }
+        val entities = repository.listAll()
         assertThat(entities).containsExactly(res)
     }
 }
